@@ -14,6 +14,7 @@ class roles_profiles::roles::geckotwin1064azuremichelletest {
     include roles_profiles::profiles::power_management
     include roles_profiles::profiles::scheduled_tasks
     include roles_profiles::profiles::azure_vm_agent
+    include roles_profiles::profiles::virtual_drivers
 
     # Adminstration
     include roles_profiles::profiles::logging
@@ -27,5 +28,4 @@ class roles_profiles::roles::geckotwin1064azuremichelletest {
     include roles_profiles::profiles::mozilla_maintenance_service
     include roles_profiles::profiles::windows_worker_runner
     include roles_profiles::profiles::microsoft_tools
-    include roles_profiles::profiles::language
 }
