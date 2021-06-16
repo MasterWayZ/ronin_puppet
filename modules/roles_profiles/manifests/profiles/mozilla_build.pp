@@ -7,7 +7,10 @@ class roles_profiles::profiles::mozilla_build {
     case $::operatingsystem {
         'Windows': {
 
-        # Current versions Determined in /modules/win_shared/facts.d/facts_win_mozilla_build.ps1
+            # C++ libraries need to be in place before Python bits
+            require roles_profiles::profiles::microsoft_tools
+
+            # Current versions Determined in /modules/win_shared/facts.d/facts_win_mozilla_build.ps1
             $cache_drive  = $facts['custom_win_location'] ? {
                 'azure'   => 'y:',
                 default => $facts['custom_win_systemdrive'],
@@ -20,6 +23,16 @@ class roles_profiles::profiles::mozilla_build {
                 'azure' => undef,
                 default => lookup('tooltool_tok')
             }
+
+            if $facts['custom_win_release_id'] == '2004'{
+                $upgrade_python = true
+            } else {
+                $upgrade_python = false
+            }
+
+            #if $upgrade_python == true {
+            #    include win_packages::vs_buildtools
+            #}
 
             class { 'win_mozilla_build':
                 current_mozbld_ver        => $facts['custom_win_mozbld_vesion'],
@@ -41,6 +54,7 @@ class roles_profiles::profiles::mozilla_build {
                 external_source           => lookup('windows.s3.ext_pkg_src'),
                 builds_dir                => "${facts['custom_win_systemdrive']}\\builds",
                 tooltool_tok              => $tooltool_tok,
+                upgrade_python            => $upgrade_python,
             }
             # Bug List
             # https://bugzilla.mozilla.org/show_bug.cgi?id=1524440
