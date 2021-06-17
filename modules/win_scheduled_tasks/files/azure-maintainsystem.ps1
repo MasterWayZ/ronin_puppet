@@ -356,7 +356,7 @@ function Check-AzVM-Name {
 }
 
 $bootstrap_stage =  (Get-ItemProperty -path "HKLM:\SOFTWARE\Mozilla\ronin_puppet").bootstrap_stage
-$hand_off_ready = "yes"
+$hand_off_ready = 'yes'
 $managed_by = ((((Invoke-WebRequest -Headers @{'Metadata'=$true} -UseBasicParsing -Uri ('http://169.254.169.254/metadata/instance?api-version=2019-06-04')).Content) | ConvertFrom-Json).compute.tagsList| ? { $_.name -eq ('managed-by') })[0].value
 
 # Hand_off_ready value is set by the packer manifest
